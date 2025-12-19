@@ -1,0 +1,9 @@
+{
+  "app_name": "Crumb Pet",
+  "welcome": "Welcome to Crumb Pet",
+  "home": "Home",
+  "about": "About",
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success"
+}

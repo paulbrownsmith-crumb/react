@@ -1,0 +1,7 @@
+{
+  "generic_error": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+  "network_error": "Error de red. Por favor, verifica tu conexión.",
+  "unauthorized": "No estás autorizado para realizar esta acción.",
+  "not_found": "El recurso solicitado no fue encontrado.",
+  "server_error": "Error del servidor. Por favor, inténtalo más tarde."
+}
