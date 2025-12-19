@@ -135,18 +135,33 @@ export const useDjangoTemplate = (
 
 /**
  * Utility to inject React components into Django template placeholders
+ * 
+ * This is a helper function to prepare a container for React component injection.
+ * The actual React component rendering should be done using ReactDOM.createRoot()
+ * from the calling code.
+ * 
  * @param containerId - The ID of the container element
- * Note: Component injection requires manual React root creation by the calling code
+ * @returns The created root element or null if container not found
+ * 
+ * @example
+ * ```tsx
+ * import { createRoot } from 'react-dom/client';
+ * 
+ * const rootElement = injectReactComponents('my-container');
+ * if (rootElement) {
+ *   const root = createRoot(rootElement);
+ *   root.render(<MyComponent />);
+ * }
+ * ```
  */
 export const injectReactComponents = (
   containerId: string
-): void => {
+): HTMLDivElement | null => {
   const container = document.getElementById(containerId);
   if (container) {
     const root = document.createElement('div');
     container.appendChild(root);
-    // This would need a separate React root creation
-    // which should be handled by the calling code
-    console.warn('Component injection requires manual root creation');
+    return root;
   }
+  return null;
 };
