@@ -1,0 +1,7 @@
+{
+  "generic_error": "An error occurred. Please try again.",
+  "network_error": "Network error. Please check your connection.",
+  "unauthorized": "You are not authorized to perform this action.",
+  "not_found": "The requested resource was not found.",
+  "server_error": "Server error. Please try again later."
+}
