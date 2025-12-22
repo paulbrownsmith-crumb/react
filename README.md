@@ -65,9 +65,10 @@ This repository uses [Husky](https://typicode.github.io/husky/) to automatically
 The pre-commit hook runs automatically when you commit code and performs the following checks on staged files:
 
 - **ESLint** - Automatically fixes code style issues and enforces coding standards
-- **Type checking** - Ensures TypeScript types are correct
 
 If any check fails, the commit will be blocked until you fix the issues.
+
+**Note:** You can run `npm run type-check` manually before committing to check for TypeScript errors.
 
 ### Setting Up Git Hooks
 
