@@ -56,6 +56,39 @@ npm test:ui
 npm run lint
 ```
 
+## Git Hooks
+
+This repository uses [Husky](https://typicode.github.io/husky/) to automatically run quality checks before commits:
+
+### Pre-commit Hook
+
+The pre-commit hook runs automatically when you commit code and performs the following checks on staged files:
+
+- **ESLint** - Automatically fixes code style issues and enforces coding standards
+- **Type checking** - Ensures TypeScript types are correct
+
+If any check fails, the commit will be blocked until you fix the issues.
+
+### Setting Up Git Hooks
+
+Git hooks are automatically installed when you run:
+
+```bash
+npm install
+```
+
+This runs the `prepare` script which initializes Husky hooks.
+
+### Bypassing Hooks (Not Recommended)
+
+In rare cases where you need to bypass the hooks, you can use:
+
+```bash
+git commit --no-verify
+```
+
+**Note:** Only use this if absolutely necessary, as it skips important quality checks.
+
 ## Project Structure
 
 ```
