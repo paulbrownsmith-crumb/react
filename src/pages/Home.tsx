@@ -1,12 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/lib/auth-context';
 
-export const Route = createFileRoute('/')({
-  component: HomeComponent,
-});
-
-function HomeComponent() {
+function Home() {
   const { t } = useTranslation('common');
   const { isAuthenticated, user } = useAuth();
 
@@ -48,31 +43,7 @@ function HomeComponent() {
             <div className="px-4 py-5 sm:p-6">
               <h3 className="text-lg font-medium text-gray-900">JWT Auth</h3>
               <p className="mt-2 text-sm text-gray-500">
-                Secure authentication with JSON Web Tokens
-              </p>
-            </div>
-          </div>
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium text-gray-900">i18n</h3>
-              <p className="mt-2 text-sm text-gray-500">
-                Internationalization support for multiple languages
-              </p>
-            </div>
-          </div>
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium text-gray-900">Tailwind CSS</h3>
-              <p className="mt-2 text-sm text-gray-500">
-                Utility-first CSS framework for rapid UI development
-              </p>
-            </div>
-          </div>
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium text-gray-900">Django Integration</h3>
-              <p className="mt-2 text-sm text-gray-500">
-                Seamless integration with Django templates
+                Secure authentication using JWT
               </p>
             </div>
           </div>
@@ -81,3 +52,5 @@ function HomeComponent() {
     </div>
   );
 }
+
+export default Home;
