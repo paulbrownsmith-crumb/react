@@ -1,15 +1,6 @@
-import React, { useState, useRef } from 'react';
-
-export type User = {
-  username?: string;
-  email?: string;
-};
-
-interface HeaderProps {
-  isAuthenticated: boolean;
-  user: User | null;
-  logout: () => Promise<void>;
-}
+import { useState, useRef, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { useUser } from '@/hooks/useUser';
 
 const featuresList = [
   {
@@ -46,12 +37,29 @@ const featuresList = [
   },
 ];
 
-const Header: React.FC<HeaderProps> = ({ isAuthenticated, user, logout }) => {
+const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [featuresOpen, setFeaturesOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const firstItemRef = useRef<HTMLDivElement>(null);
+  const { isLoggedIn, login, logout } = useAuth();
+  const { data: user, isLoading } = useUser(isLoggedIn);
+
+  // Close features dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setFeaturesOpen(false);
+      }
+    };
+
+    if (featuresOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [featuresOpen]);
 
   return (
     <header className="bg-[#fdfaf3] w-full border-b border-transparent font-[Afacad]">
@@ -69,83 +77,101 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated, user, logout }) => {
               />
             </a>
             <nav className="hidden md:flex items-center gap-6 font-[Afacad]">
-            <div className="relative flex items-center" ref={dropdownRef}>
-              <button
-                ref={buttonRef}
-                className="text-[16px] font-medium text-[#23201c] cursor-pointer flex items-center gap-1 focus:outline-none"
-                onClick={() => setFeaturesOpen((open) => !open)}
-                aria-haspopup="true"
-                aria-expanded={featuresOpen}
-              >
-                Features
-                <svg
-                  className={`w-4 h-4 text-[#23201c] transition-transform duration-200 ${featuresOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
+              <div className="relative flex items-center" ref={dropdownRef}>
+                <button
+                  className="text-[16px] font-medium text-[#23201c] cursor-pointer flex items-center gap-1 focus:outline-none"
+                  onClick={() => setFeaturesOpen((open) => !open)}
+                  aria-haspopup="true"
+                  aria-expanded={featuresOpen}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {featuresOpen && (
-                <div
-                  ref={dropdownRef}
-                  className="fixed left-0 right-0 top-[72px] z-50 bg-[#fdfaf3] border-t border-[#e8e2d9]"
-                >
-                  <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-10">
-                    <div className="grid grid-cols-3 gap-x-16 gap-y-10">
-                      {featuresList.map((feature, idx) => (
-                        <div
-                          key={feature.title}
-                          ref={idx === 0 ? firstItemRef : undefined}
-                          className="cursor-pointer"
-                          tabIndex={0}
-                          role="menuitem"
-                          aria-label={feature.title}
-                        >
-                          <div className="text-[16px] font-semibold text-[#23201c] mb-2">
-                            {feature.title}
+                  Features
+                  <svg
+                    className={`w-4 h-4 text-[#23201c] transition-transform duration-200 ${featuresOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {featuresOpen && (
+                  <div className="fixed left-0 right-0 top-[72px] z-50 bg-[#fdfaf3] border-t border-[#e8e2d9]">
+                    <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-10">
+                      <div className="grid grid-cols-3 gap-x-16 gap-y-10">
+                        {featuresList.map((feature) => (
+                          <div
+                            key={feature.title}
+                            className="cursor-pointer"
+                            tabIndex={0}
+                            role="menuitem"
+                            aria-label={feature.title}
+                          >
+                            <div className="text-[16px] font-semibold text-[#23201c] mb-2">
+                              {feature.title}
+                            </div>
+                            <div className="text-[14px] text-[#23201c] opacity-70 leading-relaxed">
+                              {feature.desc}
+                            </div>
                           </div>
-                          <div className="text-[14px] text-[#23201c] opacity-70 leading-relaxed">
-                            {feature.desc}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-            <a
-              href="https://crumb.pet/en/pricing"
-              className="text-[16px] font-medium text-[#23201c]"
-            >
-              Pricing
-            </a>
+                )}
+              </div>
+              <a
+                href="https://crumb.pet/en/pricing"
+                className="text-[16px] font-medium text-[#23201c]"
+              >
+                Pricing
+              </a>
             </nav>
           </div>
           {/* Desktop auth buttons */}
           <div className="hidden md:flex items-center gap-3">
-            {isAuthenticated ? (
-              <>
-                <span className="text-[18px] text-[#23201c] font-medium mr-2">
-                  {user?.username || user?.email}
-                </span>
-                <button
-                  onClick={logout}
-                  className="rounded-full border border-[#6a0934] px-6 py-2.5 text-[16px] font-semibold text-[#6a0934] bg-transparent hover:bg-[#f5e6ef] transition-colors"
-                >
-                  Log Out
-                </button>
-              </>
-            ) : (
-              <a
-                href="https://crumb.pet/en/login"
-                className="rounded-full border border-[#6a0934] px-6 py-2.5 text-[16px] font-semibold text-[#6a0934] bg-transparent hover:bg-[#f5e6ef] transition-colors w-[150px] text-center"
+            {user && (
+              <span className="text-[16px] font-medium text-[#23201c]">
+                Hello {user.firstName}!
+              </span>
+            )}
+            {user ? (
+              <button
+                onClick={logout}
+                className="rounded-full border border-[#6a0934] px-6 py-2 text-[16px] font-semibold text-[#6a0934] bg-transparent hover:bg-[#f5e6ef] transition-colors w-[150px]"
               >
-                Log In
-              </a>
+                Log Out
+              </button>
+            ) : (
+              <button
+                onClick={login}
+                disabled={isLoading}
+                className="rounded-full border border-[#6a0934] px-6 py-2 text-[16px] font-semibold text-[#6a0934] bg-transparent hover:bg-[#f5e6ef] transition-colors w-[150px] text-center flex justify-center items-center"
+              >
+                {isLoading ? (
+                  <svg
+                    className="w-5 h-6 animate-spin text-[#6a0934]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                ) : (
+                  'Log In'
+                )}
+              </button>
             )}
             <a
               href="https://crumb.pet/en/order"
@@ -258,13 +284,18 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated, user, logout }) => {
         </div>
         {/* Drawer Footer */}
         <div className="border-t border-[#e8e2d9] px-6 py-6 bg-[#fdfaf3]">
+          {user && (
+            <p className="text-[18px] font-medium text-[#23201c] text-center mb-4">
+              Hello {user.firstName}!
+            </p>
+          )}
           <a
             href="https://crumb.pet/en/order"
             className="block w-full rounded-full px-8 py-4 text-[18px] font-semibold text-white bg-[#f15a29] hover:bg-[#e04d1f] transition-colors text-center mb-4"
           >
             Get a free tag
           </a>
-          {isAuthenticated ? (
+          {user ? (
             <button
               onClick={logout}
               className="block w-full rounded-full border border-[#f15a29] px-8 py-4 text-[18px] font-semibold text-[#f15a29] bg-transparent hover:bg-[#fef5f2] transition-colors text-center"
@@ -272,12 +303,12 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated, user, logout }) => {
               Log Out
             </button>
           ) : (
-            <a
-              href="https://crumb.pet/en/login"
+            <button
+              onClick={login}
               className="block w-full rounded-full border border-[#f15a29] px-8 py-4 text-[18px] font-semibold text-[#f15a29] bg-transparent hover:bg-[#fef5f2] transition-colors text-center"
             >
               Log In
-            </a>
+            </button>
           )}
         </div>
       </div>

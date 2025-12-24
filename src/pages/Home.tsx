@@ -4,7 +4,7 @@ import Hero from '@/components/Hero/Hero';
 function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-[#fdfaf3]">
-      <div className="flex-1">
+      <div className="flex-1 mt-[100px]">
         <Hero />
       </div>
       <Footer />
