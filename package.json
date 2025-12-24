@@ -8,6 +8,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "server": "node server/index.js",
+    "server:dev": "node --watch server/index.js",
+    "start": "npm run build && npm run server",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 5",
@@ -16,6 +19,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.17.0",
+    "express": "^4.22.1",
     "i18next": "^23.7.9",
     "i18next-browser-languagedetector": "^7.2.0",
     "i18next-http-backend": "^2.4.2",
