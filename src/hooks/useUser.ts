@@ -12,7 +12,6 @@ async function fetchUser(): Promise<User> {
   if (!response.ok) {
     throw new Error('Failed to fetch user');
   }
-  await new Promise((resolve) => setTimeout(resolve, 3000));
   return response.json();
 }
 
