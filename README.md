@@ -1,6 +1,6 @@
 # Crumb Pet React UI
 
-A modern React-based UI for crumb.pet with comprehensive features including TanStack Query, TanStack Router, SSR, JWT authentication, internationalization, and Django template integration.
+A modern React-based UI for crumb.pet with comprehensive features including TanStack Query, React Router, SSR, JWT authentication, internationalization, and Django template integration.
 
 ## Features
 
